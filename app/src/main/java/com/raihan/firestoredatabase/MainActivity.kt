@@ -70,6 +70,7 @@ class MainActivity : AppCompatActivity(), DataAdapter.ItemClickListener {
                 Toast.makeText(this, "Data added Successfully", Toast.LENGTH_SHORT).show()
                 binding.tittleEtxt.text?.clear()
                 binding.descriptionEtxt.text?.clear()
+                fetchData()
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Data added Failed", Toast.LENGTH_SHORT).show()
@@ -85,7 +86,7 @@ class MainActivity : AppCompatActivity(), DataAdapter.ItemClickListener {
             val updateDescription = binding.descriptionEtxt.text.toString()
 
             if (updateTitle.isNotEmpty() && updateDescription.isNotEmpty()) {
-                val updateData = Data(data.id, updateTitle, updateDescription)
+                val updateData = Data(data.id, updateTitle, updateDescription,Timestamp.now())
                 dataCollection.document(data.id!!)
                     .set(updateData)
                     .addOnSuccessListener {
