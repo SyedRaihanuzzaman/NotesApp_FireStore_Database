@@ -12,7 +12,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
 import com.raihan.firestoredatabase.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity(),DataAdapter.ItemClickListener {
+class MainActivity : AppCompatActivity(), DataAdapter.ItemClickListener {
     private lateinit var binding: ActivityMainBinding
     private val db = FirebaseFirestore.getInstance()
     private val dataCollection = db.collection("data")
@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity(),DataAdapter.ItemClickListener {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        adapter = DataAdapter(data,this)
+        adapter = DataAdapter(data, this)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -33,8 +33,8 @@ class MainActivity : AppCompatActivity(),DataAdapter.ItemClickListener {
             val title = binding.tittleEtxt.text.toString()
             val description = binding.descriptionEtxt.text.toString()
 
-            if (title.isNotEmpty() && description.isNotEmpty()){
-                addData(title,description)
+            if (title.isNotEmpty() && description.isNotEmpty()) {
+                addData(title, description)
             }
         }
 
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity(),DataAdapter.ItemClickListener {
             .get()
             .addOnSuccessListener {
                 data.clear()
-                for(document in it){
+                for (document in it) {
                     val item = document.toObject(Data::class.java)
                     item.id = document.id
                     data.add(item)
@@ -56,23 +56,23 @@ class MainActivity : AppCompatActivity(),DataAdapter.ItemClickListener {
                 adapter.notifyDataSetChanged()
             }
             .addOnFailureListener {
-                Toast.makeText(this,"Data Fetch Failed",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Data Fetch Failed", Toast.LENGTH_SHORT).show()
             }
     }
 
     private fun addData(title: String, description: String) {
-        val newData = Data(title=title, description = description,timestamp = Timestamp.now())
+        val newData = Data(title = title, description = description, timestamp = Timestamp.now())
         dataCollection.add(newData)
             .addOnSuccessListener {
                 newData.id = it.id
                 data.add(newData)
                 adapter.notifyDataSetChanged()
-                Toast.makeText(this,"Data added Successfully",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Data added Successfully", Toast.LENGTH_SHORT).show()
                 binding.tittleEtxt.text?.clear()
                 binding.descriptionEtxt.text?.clear()
             }
             .addOnFailureListener {
-                Toast.makeText(this,"Data added Failed",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Data added Failed", Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -80,28 +80,28 @@ class MainActivity : AppCompatActivity(),DataAdapter.ItemClickListener {
         binding.tittleEtxt.setText(data.title)
         binding.descriptionEtxt.setText(data.description)
         binding.addBtn.text = "Update"
-            binding.addBtn.setOnClickListener {
-                    val updateTitle = binding.tittleEtxt.text.toString()
-                    val updateDescription = binding.descriptionEtxt.text.toString()
+        binding.addBtn.setOnClickListener {
+            val updateTitle = binding.tittleEtxt.text.toString()
+            val updateDescription = binding.descriptionEtxt.text.toString()
 
-                    if (updateTitle.isNotEmpty() && updateDescription.isNotEmpty()){
-                        val updateData = Data(data.id, updateTitle,updateDescription,Timestamp.now())
-                        dataCollection.document(data.id!!)
-                            .set(updateData)
-                            .addOnSuccessListener {
-                                binding.tittleEtxt.text?.clear()
-                                binding.descriptionEtxt.text?.clear()
-                                adapter.notifyDataSetChanged()
-                                Toast.makeText(this,"Data Updated",Toast.LENGTH_SHORT).show()
-                                startActivity((Intent(this,MainActivity::class.java)))
-                            }
-                            .addOnFailureListener {
-                                Toast.makeText(this,"Data updated Failed",Toast.LENGTH_SHORT).show()
-                            }
+            if (updateTitle.isNotEmpty() && updateDescription.isNotEmpty()) {
+                val updateData = Data(data.id, updateTitle, updateDescription)
+                dataCollection.document(data.id!!)
+                    .set(updateData)
+                    .addOnSuccessListener {
+                        binding.tittleEtxt.text?.clear()
+                        binding.descriptionEtxt.text?.clear()
+                        adapter.notifyDataSetChanged()
+                        Toast.makeText(this, "Data Updated", Toast.LENGTH_SHORT).show()
+                        startActivity((Intent(this, MainActivity::class.java)))
                     }
-
-
+                    .addOnFailureListener {
+                        Toast.makeText(this, "Data updated Failed", Toast.LENGTH_SHORT).show()
+                    }
             }
+
+
+        }
 
 
     }
@@ -111,23 +111,23 @@ class MainActivity : AppCompatActivity(),DataAdapter.ItemClickListener {
         dialog.setTitle("Delete Files")
         dialog.setMessage("Do You want to Delete Files")
         dialog.setIcon(R.drawable.img)
-        dialog.setPositiveButton("YES"){dialogInterface, which->
+        dialog.setPositiveButton("YES") { dialogInterface, which ->
             dataCollection.document(data.id!!)
                 .delete()
                 .addOnSuccessListener {
                     adapter.notifyDataSetChanged()
-                    Toast.makeText(this,"Data Delete Successfully",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Data Delete Successfully", Toast.LENGTH_SHORT).show()
                     fetchData()
                 }
                 .addOnFailureListener {
-                    Toast.makeText(this,"Data Deletion Failed",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Data Deletion Failed", Toast.LENGTH_SHORT).show()
                 }
         }
-        dialog.setNegativeButton("No"){dialogInterface, which->
+        dialog.setNegativeButton("No") { dialogInterface, which ->
             //startActivity((Intent(this,MainActivity::class.java)))
         }
 
-        val alertDialog:AlertDialog = dialog.create()
+        val alertDialog: AlertDialog = dialog.create()
         alertDialog.setCancelable(false)
         alertDialog.show()
 
