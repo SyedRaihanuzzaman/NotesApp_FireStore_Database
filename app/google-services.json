@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "868920794940",
+    "project_id": "firestoredatabase-4b659",
+    "storage_bucket": "firestoredatabase-4b659.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:868920794940:android:f8949c6ae6c2ad6563c839",
+        "android_client_info": {
+          "package_name": "com.raihan.firestoredatabase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjzXIS_R-E-GvczZQOrP8ajwfslhNwnvs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
